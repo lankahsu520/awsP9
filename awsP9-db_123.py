@@ -35,21 +35,42 @@ def demo_dynamodb(awsP9_mgr):
 	awsP9_mgr.db_list_tables()
 	DBG_IF_LN("(TableNames: {})".format(awsP9_mgr.db_response["TableNames"]))
 
-	TableName = awsP9_mgr.db_response["TableNames"][0]
+	TableList = awsP9_mgr.db_response["TableNames"]
+	TableName = TableList[0]
 	response = awsP9_mgr.db_describe_table( TableName );
 	DBG_IF_LN("(TableNames: {}, describe: {})".format(TableName, response))
 
-	awsP9_mgr.db_create_table(TableName="Music1", pk="Artist", sk="SongTitle")
+	TableName="Music1"
+	PK="Artist"
+	SK="SongTitle"
+	if ( TableName in TableList ):
+		pass
+	else:
+		AttributeDefinitions= [
+			{'AttributeName': PK,'AttributeType': 'S'},
+			{'AttributeName': SK,'AttributeType': 'S'}
+		]
+		KeySchema=[
+			{'AttributeName': PK,'KeyType': 'HASH'},
+			{'AttributeName': SK,'KeyType': 'RANGE'}
+		]
+		awsP9_mgr.db_create_table(TableName=TableName, AttributeDefinitions=AttributeDefinitions, KeySchema=KeySchema)
 	#sleep(2)
 
+	#awsP9_mgr.db_list_tables()
+	#DBG_IF_LN("(TableNames: {})".format(awsP9_mgr.db_response["TableNames"]))
+
+	#awsP9_mgr.db_delete_table(TableName=TableName)
+
 	awsP9_mgr.db_list_tables()
 	DBG_IF_LN("(TableNames: {})".format(awsP9_mgr.db_response["TableNames"]))
 
-	awsP9_mgr.db_delete_table(TableName="Music1")
-
-	awsP9_mgr.db_list_tables()
-	DBG_IF_LN("(TableNames: {})".format(awsP9_mgr.db_response["TableNames"]))
-
+	Item={
+		'AlbumTitle': {'S': 'Somewhat Famous'},
+		PK: {'S': 'No One You Know'},
+		SK: {'S': 'Call Me Today'}
+	}
+	awsP9_mgr.db_put_item(TableName=TableName, Item=Item)
 
 def app_start():
 	#dbg_lvl_set(DBG_LVL_DEBUG)

@@ -162,37 +162,23 @@ class awsP9_ctx(pythonX9):
 	# A low-level client representing Amazon DynamoDB
 	# https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/dynamodb.html
 	#db_create_table(TableName="Music", pk="Artist", sk="SongTitle")
-	def db_create_table(self, TableName="", pk="", sk=""):
+	def db_create_table(self, TableName="", AttributeDefinitions="", KeySchema=""):
 		self.db_response = ""
 		try:
 			if (TableName == ""):
 				DBG_ER_LN(self, "TableName is Null !!!" )
 			else:
 				self.db_response = self.dbcli.create_table(
-					AttributeDefinitions= [{
-							'AttributeName': pk,
-							'AttributeType': 'S'
-						}, {
-							'AttributeName': sk,
-							'AttributeType': 'S'
-						}
-					],
+					AttributeDefinitions=AttributeDefinitions,
 					TableName=TableName,
-					KeySchema=[{
-							'AttributeName': pk,
-							'KeyType': 'HASH'
-						}, {
-							'AttributeName': sk,
-							'KeyType': 'RANGE'
-						}
-					],
+					KeySchema=KeySchema,
 					ProvisionedThroughput={
 						'ReadCapacityUnits': 5,
 						'WriteCapacityUnits': 5
 					},
 				)
 			self.db_describe_table(TableName=TableName, status="CREATING")
-			DBG_DB_LN(self, "{}". format(DBG_TXT_DONE) )
+			DBG_DB_LN(self, "{} (TableName: {})". format( DBG_TXT_DONE, TableName ) )
 		except botocore.exceptions.ClientError as e:
 			error_code = e.response['Error']['Code']
 			DBG_ER_LN(self, "{} (error_code:{}, TableName: {})".format( e.__str__(), error_code, TableName ))
@@ -215,7 +201,7 @@ class awsP9_ctx(pythonX9):
 				while (retry>0) and (self.db_describe_table(TableName=TableName) != ""):
 					sleep(400/1000)
 					retry-=1
-				DBG_DB_LN(self, "{}". format(DBG_TXT_DONE) )
+				DBG_DB_LN(self, "{} (TableName: {})". format( DBG_TXT_DONE, TableName ) )
 		except botocore.exceptions.ClientError as e:
 			error_code = e.response['Error']['Code']
 			DBG_ER_LN(self, "{} (error_code:{}, s3_bucket_name: {})".format( e.__str__(), error_code, TableName ))
@@ -240,7 +226,7 @@ class awsP9_ctx(pythonX9):
 						self.db_response = self.db_describe_table(TableName=TableName)
 						sleep(400/1000)
 						retry-=1
-				DBG_DB_LN(self, "{}". format(DBG_TXT_DONE) )
+				DBG_DB_LN(self, "{} (TableName: {})". format( DBG_TXT_DONE, TableName ) )
 		except botocore.exceptions.ClientError as e:
 			error_code = e.response['Error']['Code']
 			DBG_ER_LN(self, "{} (error_code:{}, s3_bucket_name: {})".format( e.__str__(), error_code, TableName ))
@@ -258,7 +244,29 @@ class awsP9_ctx(pythonX9):
 				self.db_response = self.dbcli.list_tables(Limit=limit)
 			else:
 				self.db_response = self.dbcli.list_tables(ExclusiveStartTableName=StartTableName, Limit=limit)
-			DBG_DB_LN(self, "{}". format(DBG_TXT_DONE) )
+			DBG_DB_LN(self, "{}". format( DBG_TXT_DONE ) )
+		except botocore.exceptions.ClientError as e:
+			error_code = e.response['Error']['Code']
+			DBG_ER_LN(self, "{} (error_code:{}, StartTableName: {})".format( e.__str__(), error_code, StartTableName ))
+			self.db_error_code = error_code
+		except ClientError as e:
+			error_code = e.response['Error']['Code']
+			DBG_ER_LN(self, "{} (error_code:{}, StartTableName: {})".format( e.__str__(), error_code, StartTableName ))
+			self.db_error_code = error_code
+		return self.db_response
+
+	def db_put_item(self, TableName="", Item=""):
+		self.db_response =[]
+		try:
+			if (TableName == ""):
+				DBG_ER_LN(self, "TableName is Null !!!" )
+			else:
+				self.db_response = self.dbcli.put_item(
+						Item=Item,
+						ReturnConsumedCapacity='TOTAL',
+						TableName=TableName
+					)
+				DBG_DB_LN(self, "{} (TableName: {})". format( DBG_TXT_DONE, TableName ) )
 		except botocore.exceptions.ClientError as e:
 			error_code = e.response['Error']['Code']
 			DBG_ER_LN(self, "{} (error_code:{}, StartTableName: {})".format( e.__str__(), error_code, StartTableName ))
@@ -288,4 +296,5 @@ class awsP9_ctx(pythonX9):
 				self.s3src = boto3.resource("s3")
 				self.s3cli = boto3.client("s3")
 			elif ( service == "dynamodb" ):
+				self.dbsrc = boto3.resource("dynamodb")
 				self.dbcli = boto3.client("dynamodb")
