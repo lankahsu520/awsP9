@@ -32,12 +32,12 @@ app_apps = {
 
 def demo_dynamodb(awsP9_mgr):
 	DBG_DB_LN("{}".format(DBG_TXT_ENTER))
-	awsP9_mgr.db_list_tables()
-	DBG_IF_LN("(TableNames: {})".format(awsP9_mgr.db_response["TableNames"]))
+	awsP9_mgr.dydb_list_tables()
+	DBG_IF_LN("(TableNames: {})".format(awsP9_mgr.dydb_response["TableNames"]))
 
-	TableList = awsP9_mgr.db_response["TableNames"]
+	TableList = awsP9_mgr.dydb_response["TableNames"]
 	TableName = TableList[0]
-	response = awsP9_mgr.db_describe_table( TableName );
+	response = awsP9_mgr.dydb_describe_table( TableName );
 	DBG_IF_LN("(TableNames: {}, describe: {})".format(TableName, response))
 
 	TableName="Music1"
@@ -54,23 +54,23 @@ def demo_dynamodb(awsP9_mgr):
 			{'AttributeName': PK,'KeyType': 'HASH'},
 			{'AttributeName': SK,'KeyType': 'RANGE'}
 		]
-		awsP9_mgr.db_create_table(TableName=TableName, AttributeDefinitions=AttributeDefinitions, KeySchema=KeySchema)
+		awsP9_mgr.dydb_create_table(TableName=TableName, AttributeDefinitions=AttributeDefinitions, KeySchema=KeySchema)
 	#sleep(2)
 
-	#awsP9_mgr.db_list_tables()
-	#DBG_IF_LN("(TableNames: {})".format(awsP9_mgr.db_response["TableNames"]))
+	#awsP9_mgr.dydb_list_tables()
+	#DBG_IF_LN("(TableNames: {})".format(awsP9_mgr.dydb_response["TableNames"]))
 
-	#awsP9_mgr.db_delete_table(TableName=TableName)
+	#awsP9_mgr.dydb_delete_table(TableName=TableName)
 
-	awsP9_mgr.db_list_tables()
-	DBG_IF_LN("(TableNames: {})".format(awsP9_mgr.db_response["TableNames"]))
+	awsP9_mgr.dydb_list_tables()
+	DBG_IF_LN("(TableNames: {})".format(awsP9_mgr.dydb_response["TableNames"]))
 
 	Item={
 		'AlbumTitle': {'S': 'Somewhat Famous'},
 		PK: {'S': 'No One You Know'},
 		SK: {'S': 'Call Me Today'}
 	}
-	awsP9_mgr.db_put_item(TableName=TableName, Item=Item)
+	awsP9_mgr.dydb_put_item(TableName=TableName, Item=Item)
 
 def app_start():
 	#dbg_lvl_set(DBG_LVL_DEBUG)
@@ -164,4 +164,4 @@ def main(argv):
 if __name__ == "__main__":
 	main(sys.argv[0:])
 
-# PYTHONPATH=./python ./awsP9-db_123.py -d 3
+# PYTHONPATH=./python ./awsP9-dydb_123.py -d 3
