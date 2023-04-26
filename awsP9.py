@@ -161,13 +161,21 @@ class awsP9_ctx(pythonX9):
 
 	# A low-level client representing Amazon DynamoDB
 	# https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/dynamodb.html
-	#dydb_create_table(TableName="Music", pk="Artist", sk="SongTitle")
-	def dydb_create_table(self, TableName="", AttributeDefinitions="", KeySchema=""):
+	#dydb_create_table(TableName="Music", PK="Artist", SK="SongTitle")
+	def dydb_create_table(self, TableName="", PK="", SK=""):
 		self.dydb_response = ""
 		try:
 			if (TableName == ""):
 				DBG_ER_LN(self, "TableName is Null !!!" )
 			else:
+				AttributeDefinitions= [
+					{'AttributeName': PK,'AttributeType': 'S'},
+					{'AttributeName': SK,'AttributeType': 'S'}
+				]
+				KeySchema=[
+					{'AttributeName': PK,'KeyType': 'HASH'},
+					{'AttributeName': SK,'KeyType': 'RANGE'}
+				]
 				self.dydb_response = self.dbcli.create_table(
 					AttributeDefinitions=AttributeDefinitions,
 					TableName=TableName,
@@ -255,18 +263,21 @@ class awsP9_ctx(pythonX9):
 			self.dydb_error_code = error_code
 		return self.dydb_response
 
-	def dydb_put_item(self, TableName="", Item=""):
+	def dydb_put_item(self, TableName=""):
 		self.dydb_response =[]
 		try:
 			if (TableName == ""):
 				DBG_ER_LN(self, "TableName is Null !!!" )
+			elif ( len(self.attrX) == 0 ):
+				DBG_ER_LN(self, "self.attrX is Null !!!" )
 			else:
 				self.dydb_response = self.dbcli.put_item(
-						Item=Item,
+						Item=self.attrX,
 						ReturnConsumedCapacity='TOTAL',
 						TableName=TableName
 					)
 				DBG_DB_LN(self, "{} (TableName: {})". format( DBG_TXT_DONE, TableName ) )
+				self.dydb_attrX_free()
 		except botocore.exceptions.ClientError as e:
 			error_code = e.response['Error']['Code']
 			DBG_ER_LN(self, "{} (error_code:{}, StartTableName: {})".format( e.__str__(), error_code, StartTableName ))
@@ -276,6 +287,34 @@ class awsP9_ctx(pythonX9):
 			DBG_ER_LN(self, "{} (error_code:{}, StartTableName: {})".format( e.__str__(), error_code, StartTableName ))
 			self.dydb_error_code = error_code
 		return self.dydb_response
+
+	# String
+	def dydb_attrX_addS(self, key="", value=""):
+		valueDict={ "S": value }
+		self.attrX.update( { key: valueDict } )
+		DBG_TR_LN(self, "(attrX: {})".format( self.attrX ))
+
+	# Number
+	def dydb_attrX_addN(self, key="", value=0):
+		valueDict={ "N": "{}".format(value) }
+		self.attrX.update( { key: valueDict } )
+		DBG_TR_LN(self, "(attrX: {})".format( self.attrX ))
+
+	# Boolean
+	def dydb_attrX_addBoolean(self, key="", value=True):
+		valueDict={ "BOOL": value }
+		self.attrX.update( { key: valueDict } )
+		DBG_TR_LN(self, "(attrX: {})".format( self.attrX ))
+
+	# List
+	def dydb_attrX_addListS(self, key="", value="", separator=":"):
+		valueL= [{"S": s} for s in value.split(separator)]
+		valueDict={ "L": valueL }
+		self.attrX.update( { key: valueDict } )
+		DBG_TR_LN(self, "(attrX: {})".format( self.attrX ))
+
+	def dydb_attrX_free(self):
+		self.attrX = {}
 
 	def release(self):
 		self.is_quit = 1
@@ -289,6 +328,7 @@ class awsP9_ctx(pythonX9):
 		self._kwargs = kwargs
 		self.region = region
 		self.aws_service = aws_service
+		self.attrX = {}
 
 		DBG_IF_LN(self, "(region: {}, aws_service: {})".format( region, aws_service ))
 		for service in aws_service:

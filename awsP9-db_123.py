@@ -46,15 +46,7 @@ def demo_dynamodb(awsP9_mgr):
 	if ( TableName in TableList ):
 		pass
 	else:
-		AttributeDefinitions= [
-			{'AttributeName': PK,'AttributeType': 'S'},
-			{'AttributeName': SK,'AttributeType': 'S'}
-		]
-		KeySchema=[
-			{'AttributeName': PK,'KeyType': 'HASH'},
-			{'AttributeName': SK,'KeyType': 'RANGE'}
-		]
-		awsP9_mgr.dydb_create_table(TableName=TableName, AttributeDefinitions=AttributeDefinitions, KeySchema=KeySchema)
+		awsP9_mgr.dydb_create_table(TableName=TableName, PK=PK, SK=SK)
 	#sleep(2)
 
 	#awsP9_mgr.dydb_list_tables()
@@ -65,12 +57,17 @@ def demo_dynamodb(awsP9_mgr):
 	awsP9_mgr.dydb_list_tables()
 	DBG_IF_LN("(TableNames: {})".format(awsP9_mgr.dydb_response["TableNames"]))
 
-	Item={
-		'AlbumTitle': {'S': 'Somewhat Famous'},
-		PK: {'S': 'No One You Know'},
-		SK: {'S': 'Call Me Today'}
-	}
-	awsP9_mgr.dydb_put_item(TableName=TableName, Item=Item)
+	awsP9_mgr.dydb_attrX_free()
+	awsP9_mgr.dydb_attrX_addS(key=PK, value="No One You Know")
+	awsP9_mgr.dydb_attrX_addS(key=SK, value="Call Me Today")
+	awsP9_mgr.dydb_attrX_addS(key="AlbumTitle", value="Somewhat Famous")
+	awsP9_mgr.dydb_attrX_addN(key="Price", value=10)
+	awsP9_mgr.dydb_attrX_addBoolean(key="OutOfPrint ", value=True)
+	Sponsor = "dog:mouse:tiger"
+	#Sponsor = [{"S": "dog"},{"S": "mouse"},{"S": "tiger"}]
+	awsP9_mgr.dydb_attrX_addListS(key="Sponsor", value=Sponsor, separator=":")
+
+	awsP9_mgr.dydb_put_item(TableName=TableName)
 
 def app_start():
 	#dbg_lvl_set(DBG_LVL_DEBUG)

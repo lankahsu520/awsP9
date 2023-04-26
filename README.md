@@ -35,12 +35,20 @@ flowchart TD
 
 			subgraph Item
 				
-				db_put_item
+				dydb_put_item
 
 
 
 
 
+			end
+			
+			subgraph attrX
+				dydb_attrX_addS
+				dydb_attrX_addN
+				dydb_attrX_addBoolean
+				dydb_attrX_addListS
+				dydb_attrX_free
 			end
 		end
 	end
