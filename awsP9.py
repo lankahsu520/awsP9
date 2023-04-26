@@ -186,7 +186,7 @@ class awsP9_ctx(pythonX9):
 					},
 				)
 			self.dydb_describe_table(TableName=TableName, status="CREATING")
-			DBG_DB_LN(self, "{} (TableName: {})". format( DBG_TXT_DONE, TableName ) )
+			DBG_DB_LN(self, "{} (TableName: {}, PK: {}, SK: {})". format( DBG_TXT_DONE, TableName, PK, SK ) )
 		except botocore.exceptions.ClientError as e:
 			error_code = e.response['Error']['Code']
 			DBG_ER_LN(self, "{} (error_code:{}, TableName: {})".format( e.__str__(), error_code, TableName ))
@@ -252,7 +252,7 @@ class awsP9_ctx(pythonX9):
 				self.dydb_response = self.dbcli.list_tables(Limit=limit)
 			else:
 				self.dydb_response = self.dbcli.list_tables(ExclusiveStartTableName=StartTableName, Limit=limit)
-			DBG_DB_LN(self, "{}". format( DBG_TXT_DONE ) )
+			DBG_DB_LN(self, "{} (StartTableName: {}, limit: {})". format( DBG_TXT_DONE, StartTableName, limit ) )
 		except botocore.exceptions.ClientError as e:
 			error_code = e.response['Error']['Code']
 			DBG_ER_LN(self, "{} (error_code:{}, StartTableName: {})".format( e.__str__(), error_code, StartTableName ))
@@ -276,7 +276,7 @@ class awsP9_ctx(pythonX9):
 						ReturnConsumedCapacity='TOTAL',
 						TableName=TableName
 					)
-				DBG_DB_LN(self, "{} (TableName: {})". format( DBG_TXT_DONE, TableName ) )
+				DBG_DB_LN(self, "{} (TableName: {}, attrX: {})". format( DBG_TXT_DONE, TableName, self.attrX ) )
 				self.dydb_attrX_free()
 		except botocore.exceptions.ClientError as e:
 			error_code = e.response['Error']['Code']
