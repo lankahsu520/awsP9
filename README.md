@@ -18,7 +18,7 @@ flowchart TD
 		DynamoDB
 	end
 
-	subgraph awsX9
+	subgraph awsP9
 		subgraph awsxDB
 			subgraph Show
 				
@@ -71,7 +71,7 @@ flowchart TD
 		S3
 	end
 
-	subgraph awsX9
+	subgraph awsP9
 		subgraph awsxS3
 			s3_copy_object
 			s3_delete_object
