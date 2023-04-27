@@ -263,6 +263,30 @@ class awsP9_ctx(pythonX9):
 			self.dydb_error_code = error_code
 		return self.dydb_response
 
+	def dydb_get_item(self, TableName=""):
+		self.dydb_response =[]
+		try:
+			if (TableName == ""):
+				DBG_ER_LN(self, "TableName is Null !!!" )
+			elif ( len(self.attrX) == 0 ):
+				DBG_ER_LN(self, "self.attrX is Null !!!" )
+			else:
+				self.dydb_response = self.dbcli.get_item(
+						Key=self.attrX,
+						TableName=TableName
+					)
+				DBG_DB_LN(self, "{} (TableName: {}, attrX: {})". format( DBG_TXT_DONE, TableName, self.attrX ) )
+				self.dydb_attrX_free()
+		except botocore.exceptions.ClientError as e:
+			error_code = e.response['Error']['Code']
+			DBG_ER_LN(self, "{} (error_code:{}, StartTableName: {})".format( e.__str__(), error_code, StartTableName ))
+			self.dydb_error_code = error_code
+		except ClientError as e:
+			error_code = e.response['Error']['Code']
+			DBG_ER_LN(self, "{} (error_code:{}, StartTableName: {})".format( e.__str__(), error_code, StartTableName ))
+			self.dydb_error_code = error_code
+		return self.dydb_response
+
 	def dydb_put_item(self, TableName=""):
 		self.dydb_response =[]
 		try:

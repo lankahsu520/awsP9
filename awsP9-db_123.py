@@ -66,8 +66,13 @@ def demo_dynamodb(awsP9_mgr):
 	Sponsor = "dog:mouse:tiger"
 	#Sponsor = [{"S": "dog"},{"S": "mouse"},{"S": "tiger"}]
 	awsP9_mgr.dydb_attrX_addListS(key="Sponsor", value=Sponsor, separator=":")
-
 	awsP9_mgr.dydb_put_item(TableName=TableName)
+
+	awsP9_mgr.dydb_attrX_free()
+	awsP9_mgr.dydb_attrX_addS(key=PK, value="No One You Know")
+	awsP9_mgr.dydb_attrX_addS(key=SK, value="Call Me Today")
+	awsP9_mgr.dydb_get_item(TableName=TableName)
+	DBG_IF_LN("dydb_get_item. (dydb_response['Item']: {})".format(awsP9_mgr.dydb_response["Item"]))
 
 def app_start():
 	#dbg_lvl_set(DBG_LVL_DEBUG)
