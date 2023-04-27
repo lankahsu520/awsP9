@@ -34,7 +34,7 @@ flowchart TD
 			end
 
 			subgraph Item
-				
+				dydb_del_item
 				dydb_put_item
 
 
