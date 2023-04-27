@@ -21,6 +21,7 @@
 import boto3
 from pythonX9 import *
 import botocore
+import json
 
 AWS_SERVICE_S3="s3"
 AWS_SERVICE_DYNAMODB="dynamodb"
@@ -268,22 +269,22 @@ class awsP9_ctx(pythonX9):
 		try:
 			if (TableName == ""):
 				DBG_ER_LN(self, "TableName is Null !!!" )
-			elif ( len(self.attrX) == 0 ):
-				DBG_ER_LN(self, "self.attrX is Null !!!" )
+			elif ( len(self.keyX) == 0 ):
+				DBG_ER_LN(self, "self.keyX is Null !!!" )
 			else:
 				self.dydb_response = self.dbcli.delete_item(
-						Key=self.attrX,
+						Key=self.keyX,
 						TableName=TableName
 					)
-				DBG_DB_LN(self, "{} (TableName: {}, attrX: {})". format( DBG_TXT_DONE, TableName, self.attrX ) )
-				self.dydb_attrX_free()
+				DBG_DB_LN(self, "{} (TableName: {}, keyX: {})". format( DBG_TXT_DONE, TableName, self.keyX ) )
+				self.dydb_keyX_free()
 		except botocore.exceptions.ClientError as e:
 			error_code = e.response['Error']['Code']
-			DBG_ER_LN(self, "{} (error_code:{}, StartTableName: {})".format( e.__str__(), error_code, StartTableName ))
+			DBG_ER_LN(self, "{} (error_code:{}, TableName: {})".format( e.__str__(), error_code, TableName ))
 			self.dydb_error_code = error_code
 		except ClientError as e:
 			error_code = e.response['Error']['Code']
-			DBG_ER_LN(self, "{} (error_code:{}, StartTableName: {})".format( e.__str__(), error_code, StartTableName ))
+			DBG_ER_LN(self, "{} (error_code:{}, TableName: {})".format( e.__str__(), error_code, TableName ))
 			self.dydb_error_code = error_code
 		return self.dydb_response
 
@@ -292,22 +293,22 @@ class awsP9_ctx(pythonX9):
 		try:
 			if (TableName == ""):
 				DBG_ER_LN(self, "TableName is Null !!!" )
-			elif ( len(self.attrX) == 0 ):
-				DBG_ER_LN(self, "self.attrX is Null !!!" )
+			elif ( len(self.keyX) == 0 ):
+				DBG_ER_LN(self, "self.keyX is Null !!!" )
 			else:
 				self.dydb_response = self.dbcli.get_item(
-						Key=self.attrX,
+						Key=self.keyX,
 						TableName=TableName
 					)
-				DBG_DB_LN(self, "{} (TableName: {}, attrX: {})". format( DBG_TXT_DONE, TableName, self.attrX ) )
-				self.dydb_attrX_free()
+				DBG_DB_LN(self, "{} (TableName: {}, keyX: {})". format( DBG_TXT_DONE, TableName, self.keyX ) )
+				self.dydb_keyX_free()
 		except botocore.exceptions.ClientError as e:
 			error_code = e.response['Error']['Code']
-			DBG_ER_LN(self, "{} (error_code:{}, StartTableName: {})".format( e.__str__(), error_code, StartTableName ))
+			DBG_ER_LN(self, "{} (error_code:{}, TableName: {})".format( e.__str__(), error_code, TableName ))
 			self.dydb_error_code = error_code
 		except ClientError as e:
 			error_code = e.response['Error']['Code']
-			DBG_ER_LN(self, "{} (error_code:{}, StartTableName: {})".format( e.__str__(), error_code, StartTableName ))
+			DBG_ER_LN(self, "{} (error_code:{}, TableName: {})".format( e.__str__(), error_code, TableName ))
 			self.dydb_error_code = error_code
 		return self.dydb_response
 
@@ -328,13 +329,58 @@ class awsP9_ctx(pythonX9):
 				self.dydb_attrX_free()
 		except botocore.exceptions.ClientError as e:
 			error_code = e.response['Error']['Code']
-			DBG_ER_LN(self, "{} (error_code:{}, StartTableName: {})".format( e.__str__(), error_code, StartTableName ))
+			DBG_ER_LN(self, "{} (error_code:{}, TableName: {})".format( e.__str__(), error_code, TableName ))
 			self.dydb_error_code = error_code
 		except ClientError as e:
 			error_code = e.response['Error']['Code']
-			DBG_ER_LN(self, "{} (error_code:{}, StartTableName: {})".format( e.__str__(), error_code, StartTableName ))
+			DBG_ER_LN(self, "{} (error_code:{}, TableName: {})".format( e.__str__(), error_code, TableName ))
 			self.dydb_error_code = error_code
 		return self.dydb_response
+
+	def dydb_update_item(self, TableName=""):
+		self.dydb_response =[]
+		try:
+			if (TableName == ""):
+				DBG_ER_LN(self, "TableName is Null !!!" )
+			elif ( len(self.attrX) == 0 ):
+				DBG_ER_LN(self, "self.attrX is Null !!!" )
+			else:
+				d = self.attrX
+				s = ", ".join([f'{k}=:{k}' for k, v in d.items()])
+				SET_STR = "SET {}".format(s)
+				s = ", ".join([f'\':{k}\': {v}' for k, v in d.items()])
+				EXPRESS_STR = f"{{ {s} }}"
+				EXPRESS_DICT = json.loads(EXPRESS_STR.replace("'", "\""))
+				DBG_TR_LN(self, "(EXPRESS_STR: {})". format( EXPRESS_STR ) )
+				DBG_TR_LN(self, "(SET_STR: {})". format( SET_STR ) )
+				self.dydb_response = self.dbcli.update_item(
+						Key=self.keyX,
+						ReturnValues='ALL_NEW',
+						ExpressionAttributeValues=EXPRESS_DICT,
+						UpdateExpression=SET_STR,
+						TableName=TableName
+					)
+				DBG_DB_LN(self, "{} (TableName: {}, attrX: {})". format( DBG_TXT_DONE, TableName, self.attrX ) )
+				self.dydb_keyX_free()
+				self.dydb_attrX_free()
+		except botocore.exceptions.ClientError as e:
+			error_code = e.response['Error']['Code']
+			DBG_ER_LN(self, "{} (error_code:{}, TableName: {})".format( e.__str__(), error_code, TableName ))
+			self.dydb_error_code = error_code
+		except ClientError as e:
+			error_code = e.response['Error']['Code']
+			DBG_ER_LN(self, "{} (error_code:{}, TableName: {})".format( e.__str__(), error_code, TableName ))
+			self.dydb_error_code = error_code
+		return self.dydb_response
+
+	# String
+	def dydb_keyX_addS(self, key="", value=""):
+		valueDict={ "S": value }
+		self.keyX.update( { key: valueDict } )
+		DBG_TR_LN(self, "(keyX: {})".format( self.keyX ))
+
+	def dydb_keyX_free(self):
+		self.keyX = {}
 
 	# String
 	def dydb_attrX_addS(self, key="", value=""):
@@ -377,6 +423,7 @@ class awsP9_ctx(pythonX9):
 		self.region = region
 		self.aws_service = aws_service
 		self.attrX = {}
+		self.keyX = {}
 
 		DBG_IF_LN(self, "(region: {}, aws_service: {})".format( region, aws_service ))
 		for service in aws_service:
