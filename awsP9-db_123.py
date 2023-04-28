@@ -33,77 +33,90 @@ app_apps = {
 def demo_dynamodb(awsP9_mgr):
 	DBG_DB_LN("{}".format(DBG_TXT_ENTER))
 
-	print("\n")
-	DBG_IF_LN("call dydb_list_tables ...")
-	awsP9_mgr.dydb_list_tables()
-	DBG_IF_LN("(TableNames: {})".format(awsP9_mgr.dydb_response["TableNames"]))
-
-	print("\n")
-	DBG_IF_LN("call dydb_describe_table ...")
-	TableList = awsP9_mgr.dydb_response["TableNames"]
-	TableName = TableList[0]
-	response = awsP9_mgr.dydb_describe_table( TableName );
-	DBG_IF_LN("(TableNames: {}, describe: {})".format(TableName, response))
-
-	TableName="Music1"
-	PK="Artist"
-	SK="SongTitle"
-	if ( TableName in TableList ):
-		pass
-	else:
-		print("\n")
-		DBG_IF_LN("call dydb_create_table ...")
-		awsP9_mgr.dydb_create_table(TableName=TableName, PK=PK, SK=SK)
-	#sleep(2)
-
+	#print("\n")
+	#DBG_IF_LN("call dydb_list_tables ...")
 	#awsP9_mgr.dydb_list_tables()
 	#DBG_IF_LN("(TableNames: {})".format(awsP9_mgr.dydb_response["TableNames"]))
+	#
+	#print("\n")
+	#DBG_IF_LN("call dydb_describe_table ...")
+	#TableList = awsP9_mgr.dydb_response["TableNames"]
+	#TableName = TableList[0]
+	#response = awsP9_mgr.dydb_describe_table( TableName );
+	#DBG_IF_LN("(TableNames: {}, describe: {})".format(TableName, response))
+	#
+	#TableName="Music1"
+	#PK="Artist"
+	#SK="SongTitle"
+	#DBG_IF_LN("(TableNames: {}, PK: {}, SK: {})".format(TableName, PK, SK))
+	#if ( TableName in TableList ):
+	#	pass
+	#else:
+	#	print("\n")
+	#	DBG_IF_LN("call dydb_create_table ...")
+	#	awsP9_mgr.dydb_create_table(TableName=TableName, PK=PK, SK=SK)
+	##sleep(2)
+	#
+	##awsP9_mgr.dydb_list_tables()
+	##DBG_IF_LN("(TableNames: {})".format(awsP9_mgr.dydb_response["TableNames"]))
+	#
+	##awsP9_mgr.dydb_delete_table(TableName=TableName)
+	#
+	#print("\n\n")
+	#DBG_IF_LN("call dydb_list_tables ...")
+	#awsP9_mgr.dydb_list_tables()
+	#DBG_IF_LN("(TableNames: {})".format(awsP9_mgr.dydb_response["TableNames"]))
+	#
+	#print("\n")
+	#DBG_IF_LN("call dydb_put_item ...")
+	#awsP9_mgr.dydb_attrX_free()
+	#awsP9_mgr.dydb_attrX_addS(key=PK, value="No One You Know")
+	#awsP9_mgr.dydb_attrX_addS(key=SK, value="Call Me Today")
+	#awsP9_mgr.dydb_attrX_addS(key="AlbumTitle", value="Somewhat Famous")
+	#awsP9_mgr.dydb_attrX_addN(key="Price", value=10)
+	#awsP9_mgr.dydb_attrX_addBoolean(key="OutOfPrint ", value=True)
+	#Sponsor = "dog:mouse:tiger"
+	##Sponsor = [{"S": "dog"},{"S": "mouse"},{"S": "tiger"}]
+	#awsP9_mgr.dydb_attrX_addListS(key="Sponsor", value=Sponsor, separator=":")
+	#awsP9_mgr.dydb_put_item(TableName=TableName)
+	#
+	#print("\n")
+	#DBG_IF_LN("call dydb_get_item ...")
+	#awsP9_mgr.dydb_keyX_free()
+	#awsP9_mgr.dydb_keyX_addS(key=PK, value="No One You Know")
+	#awsP9_mgr.dydb_keyX_addS(key=SK, value="Call Me Today")
+	#awsP9_mgr.dydb_get_item(TableName=TableName)
+	#DBG_IF_LN("dydb_get_item. (dydb_response['Item']: {})".format(awsP9_mgr.dydb_response["Item"]))
+	#
+	#print("\n")
+	#DBG_IF_LN("call dydb_update_item ...")
+	#awsP9_mgr.dydb_keyX_free()
+	#awsP9_mgr.dydb_keyX_addS(key=PK, value="No One You Know")
+	#awsP9_mgr.dydb_keyX_addS(key=SK, value="Call Me Today")
+	#awsP9_mgr.dydb_attrX_free()
+	#awsP9_mgr.dydb_attrX_addN(key="Price", value=11)
+	#awsP9_mgr.dydb_update_item(TableName=TableName)
+	#DBG_IF_LN("dydb_update_item. (dydb_response: {})".format(awsP9_mgr.dydb_response))
+	#
+	#print("\n")
+	#DBG_IF_LN("call dydb_delete_item ...")
+	#awsP9_mgr.dydb_keyX_free()
+	#awsP9_mgr.dydb_keyX_addS(key=PK, value="No One You Know")
+	#awsP9_mgr.dydb_keyX_addS(key=SK, value="Call Me Today")
+	#awsP9_mgr.dydb_del_item(TableName=TableName)
+	#DBG_IF_LN("dydb_del_item. (dydb_response: {})".format(awsP9_mgr.dydb_response))
 
-	#awsP9_mgr.dydb_delete_table(TableName=TableName)
-
-	print("\n\n")
-	DBG_IF_LN("call dydb_list_tables ...")
-	awsP9_mgr.dydb_list_tables()
-	DBG_IF_LN("(TableNames: {})".format(awsP9_mgr.dydb_response["TableNames"]))
-
+	# class boto3.dynamodb.conditions.Attr(name)[source]
+	# https://boto3.amazonaws.com/v1/documentation/api/latest/reference/customizations/dynamodb.html#boto3.dynamodb.conditions.Attr
 	print("\n")
-	DBG_IF_LN("call dydb_put_item ...")
-	awsP9_mgr.dydb_attrX_free()
-	awsP9_mgr.dydb_attrX_addS(key=PK, value="No One You Know")
-	awsP9_mgr.dydb_attrX_addS(key=SK, value="Call Me Today")
-	awsP9_mgr.dydb_attrX_addS(key="AlbumTitle", value="Somewhat Famous")
-	awsP9_mgr.dydb_attrX_addN(key="Price", value=10)
-	awsP9_mgr.dydb_attrX_addBoolean(key="OutOfPrint ", value=True)
-	Sponsor = "dog:mouse:tiger"
-	#Sponsor = [{"S": "dog"},{"S": "mouse"},{"S": "tiger"}]
-	awsP9_mgr.dydb_attrX_addListS(key="Sponsor", value=Sponsor, separator=":")
-	awsP9_mgr.dydb_put_item(TableName=TableName)
+	TableName="Music"
+	ProjectionExpression = 'Artist,SongTitle'
+	awsP9_mgr.dydb_scan_item(TableName=TableName, ProjectionExpression=ProjectionExpression )
+	DBG_IF_LN("scan. (dydb_response: {})".format(awsP9_mgr.dydb_response["Items"]))
 
-	print("\n")
-	DBG_IF_LN("call dydb_get_item ...")
-	awsP9_mgr.dydb_keyX_free()
-	awsP9_mgr.dydb_keyX_addS(key=PK, value="No One You Know")
-	awsP9_mgr.dydb_keyX_addS(key=SK, value="Call Me Today")
-	awsP9_mgr.dydb_get_item(TableName=TableName)
-	DBG_IF_LN("dydb_get_item. (dydb_response['Item']: {})".format(awsP9_mgr.dydb_response["Item"]))
-
-	print("\n")
-	DBG_IF_LN("call dydb_update_item ...")
-	awsP9_mgr.dydb_keyX_free()
-	awsP9_mgr.dydb_keyX_addS(key=PK, value="No One You Know")
-	awsP9_mgr.dydb_keyX_addS(key=SK, value="Call Me Today")
-	awsP9_mgr.dydb_attrX_free()
-	awsP9_mgr.dydb_attrX_addN(key="Price", value=11)
-	awsP9_mgr.dydb_update_item(TableName=TableName)
-	DBG_IF_LN("dydb_update_item. (dydb_response: {})".format(awsP9_mgr.dydb_response))
-
-	print("\n")
-	DBG_IF_LN("call dydb_delete_item ...")
-	awsP9_mgr.dydb_keyX_free()
-	awsP9_mgr.dydb_keyX_addS(key=PK, value="No One You Know")
-	awsP9_mgr.dydb_keyX_addS(key=SK, value="Call Me Today")
-	awsP9_mgr.dydb_del_item(TableName=TableName)
-	DBG_IF_LN("dydb_del_item. (dydb_response: {})".format(awsP9_mgr.dydb_response))
+	FilterExpression=Attr('Artist').eq('No One You Know')
+	awsP9_mgr.dydb_scan_item(TableName=TableName, FilterExpression=FilterExpression, ProjectionExpression=ProjectionExpression )
+	DBG_IF_LN("scan. (dydb_response: {})".format(awsP9_mgr.dydb_response["Items"]))
 
 def app_start():
 	#dbg_lvl_set(DBG_LVL_DEBUG)

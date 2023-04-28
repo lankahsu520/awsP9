@@ -40,7 +40,7 @@ flowchart TD
 
 				dydb_get_item
 
-
+				dydb_scan_item
 			end
 			
 			subgraph attrX
