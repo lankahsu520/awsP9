@@ -110,13 +110,24 @@ def demo_dynamodb(awsP9_mgr):
 	# https://boto3.amazonaws.com/v1/documentation/api/latest/reference/customizations/dynamodb.html#boto3.dynamodb.conditions.Attr
 	print("\n")
 	TableName="Music"
+	PK="Artist"
 	ProjectionExpression = 'Artist,SongTitle'
 	awsP9_mgr.dydb_scan_item(TableName=TableName, ProjectionExpression=ProjectionExpression )
 	DBG_IF_LN("scan. (dydb_response: {})".format(awsP9_mgr.dydb_response["Items"]))
-
-	FilterExpression=Attr('Artist').eq('No One You Know')
+	
+	FilterExpression=Attr(PK).eq('No One You Know')
 	awsP9_mgr.dydb_scan_item(TableName=TableName, FilterExpression=FilterExpression, ProjectionExpression=ProjectionExpression )
 	DBG_IF_LN("scan. (dydb_response: {})".format(awsP9_mgr.dydb_response["Items"]))
+
+	print("\n")
+	TableName="Music"
+	PK="Artist"
+	SK="SongTitle"
+	KeyConditionExpression=Key(PK).eq('No One You Know') & Key(SK).eq('Call Me Today')
+	#KeyConditionExpression=Key(PK).eq('No One You Know')
+	ProjectionExpression = 'Artist,SongTitle'
+	awsP9_mgr.dydb_query_item(TableName=TableName, KeyConditionExpression=KeyConditionExpression, ProjectionExpression=ProjectionExpression )
+	DBG_IF_LN("query. (dydb_response: {})".format(awsP9_mgr.dydb_response["Items"]))
 
 def app_start():
 	#dbg_lvl_set(DBG_LVL_DEBUG)

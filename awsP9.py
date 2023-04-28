@@ -340,6 +340,25 @@ class awsP9_ctx(pythonX9):
 			self.dydb_error_code = error_code
 		return self.dydb_response
 
+	def dydb_query_item(self, TableName="", **kwargs):
+		self.dydb_response =[]
+		try:
+			if (TableName == ""):
+				DBG_ER_LN(self, "TableName is Null !!!" )
+			else:
+				tableX = self.dbsrc.Table(TableName)
+				self.dydb_response = tableX.query(**kwargs)
+				DBG_DB_LN(self, "{} (TableName: {})". format( DBG_TXT_DONE, TableName ) )
+		except botocore.exceptions.ClientError as e:
+			error_code = e.response['Error']['Code']
+			DBG_ER_LN(self, "{} (error_code:{}, TableName: {})".format( e.__str__(), error_code, TableName ))
+			self.dydb_error_code = error_code
+		except ClientError as e:
+			error_code = e.response['Error']['Code']
+			DBG_ER_LN(self, "{} (error_code:{}, TableName: {})".format( e.__str__(), error_code, TableName ))
+			self.dydb_error_code = error_code
+		return self.dydb_response
+
 	# class boto3.dynamodb.conditions.Attr(name)[source]
 	# https://boto3.amazonaws.com/v1/documentation/api/latest/reference/customizations/dynamodb.html#boto3.dynamodb.conditions.Attr
 	def dydb_scan_item(self, TableName="", **kwargs):
@@ -347,10 +366,6 @@ class awsP9_ctx(pythonX9):
 		try:
 			if (TableName == ""):
 				DBG_ER_LN(self, "TableName is Null !!!" )
-				#elif ( FilterExpression is None ):
-				#	tableX = self.dbsrc.Table(TableName)
-				#	self.dydb_response = tableX.scan()
-				#	DBG_DB_LN(self, "{} (TableName: {})". format( DBG_TXT_DONE, TableName ) )
 			else:
 				tableX = self.dbsrc.Table(TableName)
 				self.dydb_response = tableX.scan(**kwargs)

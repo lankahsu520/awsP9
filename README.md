@@ -39,7 +39,7 @@ flowchart TD
 				dydb_update_item
 
 				dydb_get_item
-
+				dydb_query_item
 				dydb_scan_item
 			end
 			
