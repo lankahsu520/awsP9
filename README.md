@@ -37,6 +37,7 @@ flowchart TD
 				dydb_del_item
 				dydb_put_item
 				dydb_update_item
+				dydb_remove_attributes
 
 				dydb_get_item
 				dydb_query_item

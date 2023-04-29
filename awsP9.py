@@ -416,6 +416,34 @@ class awsP9_ctx(pythonX9):
 			self.dydb_error_code = error_code
 		return self.dydb_response
 
+	def dydb_remove_attributes(self, TableName="", attributes=""):
+		self.dydb_response =[]
+		try:
+			if (TableName == ""):
+				DBG_ER_LN(self, "TableName is Null !!!" )
+			elif ( len(attributes) == 0 ):
+				DBG_ER_LN(self, "attributes is Null !!!" )
+			else:
+				SET_STR = "REMOVE {}".format( attributes )
+				DBG_TR_LN(self, "(SET_STR: {})". format( SET_STR ) )
+				self.dydb_response = self.dbcli.update_item(
+						Key=self.keyX,
+						UpdateExpression=SET_STR,
+						TableName=TableName
+					)
+				DBG_DB_LN(self, "{} (TableName: {}, attributes: {})". format( DBG_TXT_DONE, TableName, attributes ) )
+				self.dydb_keyX_free()
+				self.dydb_attrX_free()
+		except botocore.exceptions.ClientError as e:
+			error_code = e.response['Error']['Code']
+			DBG_ER_LN(self, "{} (error_code:{}, TableName: {})".format( e.__str__(), error_code, TableName ))
+			self.dydb_error_code = error_code
+		except ClientError as e:
+			error_code = e.response['Error']['Code']
+			DBG_ER_LN(self, "{} (error_code:{}, TableName: {})".format( e.__str__(), error_code, TableName ))
+			self.dydb_error_code = error_code
+		return self.dydb_response
+
 	# String
 	def dydb_keyX_addS(self, key="", value=""):
 		valueDict={ "S": value }
