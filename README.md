@@ -7,6 +7,7 @@ Please also read [helper_AWS-CLI.md](https://github.com/lankahsu520/HelperX/blob
 # 2. Depend on
 
 - [pythonX9](https://github.com/lankahsu520/pythonX9)
+-  [AWS SDK (Boto3)](https://boto3.amazonaws.com/v1/documentation/api/latest/index.html) (Boto3 1.26.123)
 
 # 3. Current Status
 
