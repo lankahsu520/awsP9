@@ -19,8 +19,8 @@ GITHUB_LIBS = \
 
 #** PYTHON_FILES **
 PYTHON_FILES = \
-														awsP9-db_123.py \
-														awsP9-s3_123.py
+														awsp9-db_123.py \
+														awsp9-s3_123.py
 
 DEBUG=3
 DEBUG_ARG=-d $(DEBUG)

@@ -20,11 +20,12 @@
 #import os, sys, errno, getopt, signal, time, io
 #from time import sleep
 
-from awsP9 import *
+from awsp9 import *
 
-S3_REGION_NAME=REGION_US_WEST_1
+REGION_NAME=REGION_US_WEST_1
 
-aws_service = [ "dynamodb" ]
+#aws_service = [ AWS_SERVICE_DYNAMODB, AWS_SERVICE_S3 ]
+aws_service = [ AWS_SERVICE_DYNAMODB ]
 app_list = []
 is_quit = 0
 app_apps = {
@@ -180,7 +181,7 @@ def demo_dynamodb_item(awsP9_mgr):
 
 def app_start():
 	#dbg_lvl_set(DBG_LVL_DEBUG)
-	awsP9_mgr = awsP9_ctx(aws_service=aws_service, region=S3_REGION_NAME, dbg_more=DBG_LVL_DEBUG)
+	awsP9_mgr = awsp9(aws_service=aws_service, region=REGION_NAME, dbg_more=DBG_LVL_DEBUG)
 
 	app_watch(awsP9_mgr)
 
