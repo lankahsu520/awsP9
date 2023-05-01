@@ -32,7 +32,7 @@ app_apps = {
 }
 
 def demo_dynamodb_put_item(awsP9_mgr):
-	TableName="Music1"
+	TableName="MusicBak"
 	PK="Artist"
 	SK="SongTitle"
 	print("\n")
@@ -51,7 +51,7 @@ def demo_dynamodb_put_item(awsP9_mgr):
 	awsP9_mgr.dydb_put_item(TableName=TableName)
 
 def demo_dynamodb_get_item(awsP9_mgr):
-	TableName="Music1"
+	TableName="MusicBak"
 	PK="Artist"
 	SK="SongTitle"
 	print("\n")
@@ -63,7 +63,7 @@ def demo_dynamodb_get_item(awsP9_mgr):
 	DBG_IF_LN("dydb_get_item. (dydb_response['Item']: {})".format(awsP9_mgr.dydb_response["Item"]))
 
 def demo_dynamodb_update_item(awsP9_mgr):
-	TableName="Music1"
+	TableName="MusicBak"
 	PK="Artist"
 	SK="SongTitle"
 	print("\n")
@@ -78,7 +78,7 @@ def demo_dynamodb_update_item(awsP9_mgr):
 	DBG_IF_LN("dydb_update_item. (dydb_response: {})".format(awsP9_mgr.dydb_response))
 
 def demo_dynamodb_delete_item(awsP9_mgr):
-	TableName="Music1"
+	TableName="MusicBak"
 	PK="Artist"
 	SK="SongTitle"
 	print("\n")
@@ -92,7 +92,7 @@ def demo_dynamodb_delete_item(awsP9_mgr):
 def demo_dynamodb_scan_item(awsP9_mgr):
 	# class boto3.dynamodb.conditions.Attr(name)[source]
 	# https://boto3.amazonaws.com/v1/documentation/api/latest/reference/customizations/dynamodb.html#boto3.dynamodb.conditions.Attr
-	TableName="Music1"
+	TableName="MusicBak"
 	PK="Artist"
 	print("\n")
 	awsP9_mgr.dydb_scan_item(TableName=TableName)
@@ -104,7 +104,7 @@ def demo_dynamodb_scan_item(awsP9_mgr):
 	DBG_IF_LN("scan. (dydb_response[\"Items\"]: {})".format(awsP9_mgr.dydb_response["Items"]))
 
 def demo_dynamodb_query_item(awsP9_mgr):
-	TableName="Music1"
+	TableName="MusicBak"
 	PK="Artist"
 	SK="SongTitle"
 	print("\n")
@@ -116,7 +116,7 @@ def demo_dynamodb_query_item(awsP9_mgr):
 	DBG_IF_LN("query. (dydb_response[\"Items\"]: {})".format(awsP9_mgr.dydb_response))
 
 def demo_dynamodb_remove_attributes(awsP9_mgr):
-	TableName="Music1"
+	TableName="MusicBak"
 	PK="Artist"
 	SK="SongTitle"
 	print("\n")
@@ -141,7 +141,7 @@ def demo_dynamodb_table(awsP9_mgr):
 	response = awsP9_mgr.dydb_describe_table( TableName );
 	DBG_IF_LN("(TableNames: {}, describe: {})".format(TableName, response))
 	
-	TableName="Music1"
+	TableName="MusicBak"
 	PK="Artist"
 	SK="SongTitle"
 	DBG_IF_LN("(TableNames: {}, PK: {}, SK: {})".format(TableName, PK, SK))

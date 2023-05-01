@@ -65,10 +65,10 @@ class awsp9DB(awsp9basic):
 			else:
 				self.dydb_describe_table(TableName=TableName, status="ACTIVE")
 				self.dydb_response = self.dbcli.delete_table(TableName=TableName)
-				retry = 10
-				while (retry>0) and (self.dydb_describe_table(TableName=TableName) != ""):
-					sleep(400/1000)
-					retry-=1
+				self.retry = 20
+				while (self.retry>0) and (self.dydb_describe_table(TableName=TableName) != ""):
+					sleep(self.timeout/1000)
+					self.retry-=1
 				DBG_DB_LN(self, "{} (TableName: {})". format( DBG_TXT_DONE, TableName ) )
 		except botocore.exceptions.ClientError as e:
 			error_code = e.response['Error']['Code']
@@ -89,11 +89,11 @@ class awsp9DB(awsp9basic):
 				self.dydb_response = self.dbcli.describe_table(TableName=TableName)
 				#DBG_WN_LN(self, "{}".format(self.dydb_response) )
 				if ( status != "" ):
-					retry = 10
-					while (retry>0) and (self.dydb_response['Table']['TableStatus'] == status):
+					self.retry = 20
+					while (self.retry>0) and (self.dydb_response['Table']['TableStatus'] == status):
 						self.dydb_response = self.dydb_describe_table(TableName=TableName)
-						sleep(400/1000)
-						retry-=1
+						sleep(self.timeout/1000)
+						self.retry-=1
 				DBG_DB_LN(self, "{} (TableName: {})". format( DBG_TXT_DONE, TableName ) )
 		except botocore.exceptions.ClientError as e:
 			error_code = e.response['Error']['Code']
@@ -356,6 +356,8 @@ class awsp9DB(awsp9basic):
 
 		self.attrX = {}
 		self.keyX = {}
+		self.retry = 20
+		self.timeout = 400 # 0.4 sec
 
 		DBG_IF_LN(self, "(region: {}, aws_service: {})".format( region, aws_service ))
 		for service in aws_service:
