@@ -309,6 +309,14 @@ class awsp9DB(awsp9basic):
 	def dydb_keyX_free(self):
 		self.keyX = {}
 
+	def dydb_attrX_update(self, value={}):
+		self.attrX.update( value )
+		DBG_TR_LN(self, "(attrX: {})".format( self.attrX ))
+
+	def dydb_attrX_addX_with_dict(self, value={}):
+		self.attrX.update( value )
+		DBG_TR_LN(self, "(attrX: {})".format( self.attrX ))
+
 	# String
 	def dydb_attrX_addS(self, key="", value=""):
 		valueDict={ "S": value }

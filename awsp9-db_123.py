@@ -40,7 +40,9 @@ def demo_dynamodb_put_item(awsP9_mgr):
 	awsP9_mgr.dydb_attrX_free()
 	awsP9_mgr.dydb_attrX_addS(key=PK, value="No One You Know")
 	awsP9_mgr.dydb_attrX_addS(key=SK, value="Call Me Today")
-	awsP9_mgr.dydb_attrX_addS(key="AlbumTitle", value="Somewhat Famous")
+
+	awsP9_mgr.dydb_attrX_addX_with_dict({"AlbumTitle":{"S":"Somewhat Famous"}})
+	#awsP9_mgr.dydb_attrX_addS(key="AlbumTitle", value="Somewhat Famous")
 	awsP9_mgr.dydb_attrX_addN(key="Price", value=10)
 	awsP9_mgr.dydb_attrX_addBoolean(key="OutOfPrint ", value=True)
 	Sponsor = "dog:mouse:tiger"
