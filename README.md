@@ -101,20 +101,20 @@ Do nothing
 ```
 # 5. Example or Usage
 
-#### - awsP9-db_123.py - an example of how to access DynamoDB.
+#### - awsp9-db_123.py - an example of how to access DynamoDB.
 
 ```bash
-$ make awsP9-db_123.py
+$ make awsp9-db_123.py
 or
-$ ./awsP9-db_123.py -d 3
+$ ./awsp9-db_123.py -d 3
 ```
 
-#### - awsP9-s3_123.py - an example of how to access S3.
+#### - awsp9-s3_123.py - an example of how to access S3.
 
 ```bash
-$ make awsP9-s3_123.py
+$ make awsp9-s3_123.py
 or
-$ ./awsP9-s3_123.py -d 3
+$ ./awsp9-s3_123.py -d 3
 ```
 
 # 6. License
