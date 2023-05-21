@@ -119,7 +119,7 @@ $ ./awsp9-s3_123.py -d 3
 
 # 6. License
 
-pythonX9 is under the New BSD License (BSD-3-Clause).
+awsP9 is under the New BSD License (BSD-3-Clause).
 
 
 # 7. Documentation
