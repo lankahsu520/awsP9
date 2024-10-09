@@ -103,6 +103,8 @@ Do nothing
 
 #### - awsp9-db_123.py - an example of how to access DynamoDB.
 
+> TableName: MusicBak，進行 table 檢查或建立，之後再對 table 進行新增刪除項目。 
+
 ```bash
 $ make awsp9-db_123.py
 or
@@ -110,6 +112,8 @@ $ ./awsp9-db_123.py -d 3
 ```
 
 #### - awsp9-s3_123.py - an example of how to access S3.
+
+> 一個很簡單的範例程式，檢查 bucket - lambdax9 是否存在，提取該 lambdax9 訊息
 
 ```bash
 $ make awsp9-s3_123.py
@@ -119,8 +123,8 @@ $ ./awsp9-s3_123.py -d 3
 
 # 6. License
 
-awsP9 is under the New BSD License (BSD-3-Clause).
+> awsP9 is under the New BSD License (BSD-3-Clause).
 
 
 # 7. Documentation
-Run an example and read it.
+> Run an example and read it.

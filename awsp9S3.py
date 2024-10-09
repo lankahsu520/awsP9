@@ -36,10 +36,11 @@ class awsp9S3(awsp9basic):
 			error_code = e.response['Error']['Code']
 			DBG_ER_LN(self, "{} (error_code:{}, s3_bucket_name: {})".format( e.__str__(), error_code, s3_bucket_name ))
 			self.s3_error_code = error_code
-		return self.s3_bucket
+		return self.s3_error_code
 
 	def s3_check_bucket(self, s3_bucket_name):
 		self.s3_error_code = 0
+		self.s3_response = "{}"
 		try:
 			self.s3_response = self.s3cli.head_bucket(Bucket=s3_bucket_name)
 			DBG_DB_LN(self, "{} (s3://{})".format( DBG_TXT_DONE, s3_bucket_name ))
@@ -55,6 +56,7 @@ class awsp9S3(awsp9basic):
 
 	def s3_get_bucket_location(self, s3_bucket_name):
 		self.s3_error_code = 0
+		self.s3_response = "{}"
 		try:
 			self.s3_response = self.s3cli.get_bucket_location(Bucket=s3_bucket_name)
 			DBG_DB_LN(self, "{} (s3://{})".format( DBG_TXT_DONE, s3_bucket_name ))
@@ -66,10 +68,11 @@ class awsp9S3(awsp9basic):
 			error_code = e.response['Error']['Code']
 			DBG_ER_LN(self, "{} (error_code:{}, s3_bucket_name: {})".format( e.__str__(), error_code, s3_bucket_name ))
 			self.s3_error_code = error_code
-		return self.s3_response
+		return self.s3_error_code
 
 	def s3_copy_object(self, s3_bucket_from, s3_object_from, s3_bucket_to, s3_object_to):
 		self.s3_error_code = 0
+		self.s3_response = "{}"
 		try:
 			copy_source = {
 				'Bucket': s3_bucket_from,
@@ -86,10 +89,11 @@ class awsp9S3(awsp9basic):
 			error_code = e.response['Error']['Code']
 			DBG_ER_LN(self, "{} (error_code:{}, s3_bucket_from: {})".format( e.__str__(), error_code, s3_bucket_from ))
 			self.s3_error_code = error_code
-		return self.s3_response
+		return self.s3_error_code
 
 	def s3_delete_object(self, s3_bucket_name, s3_object_name):
 		self.s3_error_code = 0
+		self.s3_response = "{}"
 		try:
 			self.s3_response = self.s3cli.delete_object(Bucket=s3_bucket_name, Key=s3_object_name)
 			DBG_DB_LN(self, "{} (s3://{}/{})".format( DBG_TXT_DONE, s3_bucket_name, s3_object_name));
@@ -101,10 +105,11 @@ class awsp9S3(awsp9basic):
 			error_code = e.response['Error']['Code']
 			DBG_ER_LN(self, "{} (error_code:{}, s3_bucket_name: {}, s3_object_name: {})".format( e.__str__(), error_code, s3_bucket_name, s3_object_name ))
 			self.s3_error_code = error_code
-		return self.s3_response
+		return self.s3_error_code
 
 	def s3_get_object(self, s3_bucket_name, s3_object_name):
 		self.s3_error_code = 0
+		self.s3_response = "{}"
 		try:
 			self.s3_response = self.s3cli.get_object(Bucket=s3_bucket_name, Key=s3_object_name)
 			DBG_DB_LN(self, "{} (s3://{}/{})".format( DBG_TXT_DONE, s3_bucket_name, s3_object_name));
@@ -116,10 +121,11 @@ class awsp9S3(awsp9basic):
 			error_code = e.response['Error']['Code']
 			DBG_ER_LN(self, "{} (error_code:{}, s3_bucket_name: {}, s3_object_name: {})".format( e.__str__(), error_code, s3_bucket_name, s3_object_name ))
 			self.s3_error_code = error_code
-		return self.s3_response
+		return self.s3_error_code
 
 	def s3_pull_object(self, s3_bucket_name, s3_object_name, local_name):
 		self.s3_error_code = 0
+		self.s3_response = "{}"
 		try:
 			#self.s3cli.download_file(s3_bucket_name, s3_object_name, local_name)
 			with open(local_name, 'wb') as f:
@@ -133,10 +139,11 @@ class awsp9S3(awsp9basic):
 			error_code = e.response['Error']['Code']
 			DBG_ER_LN(self, "{} (error_code:{}, s3_bucket_name: {})".format( e.__str__(), error_code, s3_bucket_name ))
 			self.s3_error_code = error_code
-		return self.s3_response
+		return self.s3_error_code
 
 	def s3_put_object(self, s3_bucket_name, s3_object_name, local_name):
 		self.s3_error_code = 0
+		self.s3_response = "{}"
 		try:
 			self.s3_response = self.s3cli.put_object(Body=local_name, Bucket=s3_bucket_name, Key=s3_object_name)
 			DBG_DB_LN(self, "{} (./{} -> s3://{}/{})".format( DBG_TXT_DONE, local_name, s3_bucket_name, s3_object_name));
@@ -148,7 +155,7 @@ class awsp9S3(awsp9basic):
 			error_code = e.response['Error']['Code']
 			DBG_ER_LN(self, "{} (error_code:{}, s3_bucket_name: {})".format( e.__str__(), error_code, self.s3_bucket_name ))
 			self.s3_error_code = error_code
-		return self.s3_response
+		return self.s3_error_code
 
 	def release(self):
 		self.is_quit = 1
